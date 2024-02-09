@@ -8,12 +8,11 @@ import sys
 from os.path import exists 
 
 if __name__ == "__main__":
-    arguments = sys.argv
-    if len(arguments) < 3:
-        print("Usage: ./markdown2html.py README.md README.html")
-        sys.exit(1)
-    if not exists(f"./{arguments[1]}"):
-        print(f"Missing {arguments[1]}")
-        sys.exit(1)
+    if len(sys.argv) < 3:
+        print("Usage: ./markdown2html.py README.md README.html\n", file = sys.stderr)
+        exit(1)
+    if not exists(sys.argv[1]):
+        print(f"Missing {sys.argv[1]}\n", file = sys.stderr)
+        exit(1)
         
-    sys.exit(0)
+    exit(0)
