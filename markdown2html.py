@@ -5,14 +5,14 @@ Second argument is the output file name'''
 
 
 import sys
-from os.path import exists 
+import os 
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: ./markdown2html.py README.md README.html\n", file = sys.stderr)
+        sys.stderr.write("Usage: ./markdown2html.py README.md README.html\n")
         exit(1)
-    if not exists(sys.argv[1]):
-        print(f"Missing {sys.argv[1]}\n", file = sys.stderr)
+    if not os.path.exists(sys.argv[1]):
+        sys.stderr.write("Missing " + sys.argv[1] + "\n")
         exit(1)
         
     exit(0)
