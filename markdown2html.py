@@ -25,13 +25,13 @@ if __name__ == "__main__":
         exit(1)
 
     with open(sys.argv[1]) as f:
-        with open(sys.argv[2]) as html_file:
-        lines = f.read().splitlines()
-        content = ""
+        with open(sys.argv[2], "w") as html_file:
+            lines = f.read().splitlines()
+            content = ""
 
-        for line in lines:
-            if line.startswith("#"):
-                content += heading(line)
-        html_file.write(content)
+            for line in lines:
+                if line.startswith("#"):
+                    content += heading(line)
+            html_file.write(content)
         
     exit(0)
