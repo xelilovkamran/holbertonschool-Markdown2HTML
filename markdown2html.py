@@ -14,7 +14,21 @@ def heading(line):
             count += 1
         else:
             break;
-    return f"<h{count}>{line[count:]}</h{count}>\n"
+    return f"<h{count}>{line[count + 1:]}</h{count}>\n"
+
+def unorderedList(index, line, lines):
+    html = ""
+    if not lines[index - 1].startswith("-"):
+        html += "<ul>\n"
+    html += f"<li>{line[2:]}</li>\n"
+
+    if index == len(lines) - 1:
+        html += "</ul>\n"
+        return html
+
+    if not lines[index + 1].startswith("-"):
+        html += "</ul>\n"
+    return html
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -29,9 +43,11 @@ if __name__ == "__main__":
             lines = f.read().splitlines()
             content = ""
 
-            for line in lines:
+            for index, line in enumerate(lines):
                 if line.startswith("#"):
                     content += heading(line)
+                if line.startswith("-"):
+                    content += unorderedList(index, line, lines)
             html_file.write(content)
-        
+       
     exit(0)
