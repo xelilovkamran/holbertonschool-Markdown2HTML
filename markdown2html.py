@@ -12,7 +12,8 @@ def findLines(lines, index, type):
 
     if type == "p":
         for i in range(index, len(lines)):
-            if lines[i] and lines[i][0].isalnum():
+            lines[i] = bold(italic(lines[i]))
+            if lines[i] and not lines[i].startswith("#") and not lines[i].startswith("- ") and not lines[i].startswith("* "):
                 selected.append(lines[i])
             else:
                 break
@@ -20,7 +21,8 @@ def findLines(lines, index, type):
 
     if type == "ul":        
         for i in range(index, len(lines)):
-            if lines[i] and lines[i][0] == "-":
+            lines[i] = bold(italic(lines[i]))
+            if lines[i] and lines[i].startswith("- "):
                 selected.append(lines[i])
             else:
                 break
@@ -28,7 +30,8 @@ def findLines(lines, index, type):
 
     if type == "ol":        
         for i in range(index, len(lines)):
-            if lines[i] and lines[i][0] == "*":
+            lines[i] = bold(italic(lines[i]))
+            if lines[i] and lines[i].startswith("* "):
                 selected.append(lines[i])
             else:
                 break
@@ -64,6 +67,15 @@ def paragraph(lines):
     html += f"</p>\n"
     return html
 
+def bold(line):
+    line = line.replace("**", "<b>", 1)
+    line = line.replace("**", "</b>", 1)
+    return line
+
+def italic(line):
+    line = line.replace("__", "<em>", 1)
+    line = line.replace("__", "</em>", 1)
+    return line
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -73,25 +85,26 @@ if __name__ == "__main__":
         sys.stderr.write("Missing " + sys.argv[1] + "\n")
         exit(1)
 
-    with open(sys.argv[1]) as f:
+    with open(sys.argv[1]) as readFile:
         with open(sys.argv[2], "w") as html_file:
-            lines = f.read().splitlines()
+            lines = readFile.read().splitlines()
             content = ""
 
             for index, line in enumerate(lines):
+                line = bold(italic(line))
                 if not line:
                     continue
-                if line.startswith("#"):
+                elif line.startswith("#"):
                     content += heading(line)
-                if line.startswith("-"):
+                elif line.startswith("- "):
                     selected = findLines(lines, index, "ul")
                     del lines[index:index + len(selected)]
                     content += listing(selected, "ul")
-                if line.startswith("*"):
+                elif line.startswith("* "):
                     selected = findLines(lines, index, "ol")
                     del lines[index:index + len(selected)]
                     content += listing(selected, "ol")
-                if line[0].isalnum():
+                else:
                     selected = findLines(lines, index, "p")
                     del lines[index:index + len(selected)]
                     content += paragraph(selected)

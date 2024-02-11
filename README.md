@@ -1,19 +1,10 @@
-### title
+# My title
+- He**l**lo
+- Bye
 
-* super
-* cool
+Hello
 
+I'm **a** text
+with __2 lines__
 
-# sub title
-
-- hello Holberton
-- Holberton School
-- Webstack
-
-#### New title
-
-* test 1
-* test 2
-* test3
-
-## and now?
+**Or in bold**
