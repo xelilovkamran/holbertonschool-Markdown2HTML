@@ -13,21 +13,34 @@ def heading(line):
         if character == "#":
             count += 1
         else:
-            break;
+            break
     return f"<h{count}>{line[count + 1:]}</h{count}>\n"
 
-def unorderedList(index, line, lines):
+def listing(index, line, lines, type):
     html = ""
-    if not lines[index - 1].startswith("-"):
-        html += "<ul>\n"
+    # to prevent -1 index
+    if index == 0:
+        html += f"<{type}>\n"
+
+    # to prevent "string index out of range" error
+    if not lines[index - 1]:
+        html += f"<{type}>\n"
+    elif line[0] != lines[index - 1][0]:
+        html += f"<{type}>\n"
+        
     html += f"<li>{line[2:]}</li>\n"
 
+    # if last line, close the list
     if index == len(lines) - 1:
-        html += "</ul>\n"
+        html += f"</{type}>\n"
         return html
 
-    if not lines[index + 1].startswith("-"):
-        html += "</ul>\n"
+    # to prevent "string index out of range" error
+    if not lines[index + 1]:
+        html += f"</{type}>\n"
+    elif line[0] != lines[index + 1][0]:
+        html += f"</{type}>\n"
+
     return html
 
 if __name__ == "__main__":
@@ -47,7 +60,10 @@ if __name__ == "__main__":
                 if line.startswith("#"):
                     content += heading(line)
                 if line.startswith("-"):
-                    content += unorderedList(index, line, lines)
+                    content += listing(index, line, lines, "ul")
+                if line.startswith("*"):
+                    content += listing(index, line, lines, "ol")
+                    
             html_file.write(content)
        
     exit(0)
